@@ -77,15 +77,28 @@ void redirect(int fd, char *path, int flag) {   // リダイレクト処理を�
   //        入力の場合 O_RDONLY
   //        出力の場合 O_WRONLY|O_TRUNC|O_CREAT
   //
+  
+  close(fd);
+  int fd1 = open(path, flag, 0644);
+  if(fd1 < 0) {
+    perror(path);
+    exit(1);
+  }
 }
 
 void externalCom(char *args[]) {                // 外部コマンドを実行する
-  int pid, status;
+  int pid=0, status;
   if ((pid = fork()) < 0) {                     //   新しいプロセスを作る
     perror("fork");                             //     fork 失敗
     exit(1);                                    //     非常事態，親を終了
   }
   if (pid==0) {                                 //   子プロセスなら
+    if(ifile != NULL) {
+      redirect(0, ifile, O_RDONLY);
+    } 
+    if(ofile != NULL) {
+      redirect(1, ofile, O_WRONLY|O_TRUNC|O_CREAT);
+    }
     execvp(args[0], args);                      //     コマンドを実行
     perror(args[0]);
     exit(1);
@@ -129,4 +142,33 @@ int main() {
   }
   return 0;
 }
+
+/*実行例
+ichikoharario@ichikohararionoMacBook-Air kadai12-i21itikohara % make     
+cc -D_GNU_SOURCE -Wall -std=c99 -o myshell myshell.c
+ichikoharario@ichikohararionoMacBook-Air kadai12-i21itikohara % ./myshell
+Command: ls -s > a.txt              //.ls -sの結果をa.txtに出力
+Command: cat a.txt                  //.a.txtを標準出力
+total 448
+  8 Makefile
+  8 README.md
+344 README.pdf
+  0 a.txt
+  72 myshell
+  16 myshell.c
+Command: grep .txt < a.txt　　　　　　 //a.txtを入力に指定し'.txt'を検索し、なかったので何も表示されない
+Command: grep m < a.txt              //a.txtを入力に指定し'm'を検索する
+  8 README.md
+  72 myshell
+  16 myshell.c
+Command: date > a.txt                //dateをa.txtに書き出す
+Command: cat a.txt　　　　　　　　　　　 //a.txtを出力
+2024年 7月26日 金曜日 15時45分35秒 JST
+Command: ls > cd　　　　　　　　　　　　 //リダイレクト先にコマンドを入力したとき何も表示されない
+Command: grep .txt < aaa.txt         //存在しないファイルを入力の引数にしたとき
+aaa.txt: No such file or directory
+
+
+
+*/
 
