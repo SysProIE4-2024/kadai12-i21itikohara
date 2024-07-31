@@ -147,7 +147,9 @@ int main() {
 ichikoharario@ichikohararionoMacBook-Air kadai12-i21itikohara % make     
 cc -D_GNU_SOURCE -Wall -std=c99 -o myshell myshell.c
 ichikoharario@ichikohararionoMacBook-Air kadai12-i21itikohara % ./myshell
-Command: ls -s > a.txt              //.ls -sの結果をa.txtに出力
+rm a.txt
+rm: a.txt: No such file or directory //a.txtが存在しないことを確認
+Command: ls -s > a.txt              //.ls -sの結果を新規作成したa.txtに出力
 Command: cat a.txt                  //.a.txtを標準出力
 total 448
   8 Makefile
@@ -161,13 +163,13 @@ Command: grep m < a.txt              //a.txtを入力に指定し'm'を検索す
   8 README.md
   72 myshell
   16 myshell.c
-Command: date > a.txt                //dateをa.txtに書き出す
+Command: date > a.txt                //dateをa.txtに上書きする
 Command: cat a.txt　　　　　　　　　　　 //a.txtを出力
 2024年 7月26日 金曜日 15時45分35秒 JST
-Command: ls > cd　　　　　　　　　　　　 //リダイレクト先にコマンドを入力したとき何も表示されない
 Command: grep .txt < aaa.txt         //存在しないファイルを入力の引数にしたとき
 aaa.txt: No such file or directory
-
+Command: cd > b.txt                 //内部コマンドでリダイレクトを使用した時、文法のエラーが出る
+Usage: cd DIR
 
 
 */
