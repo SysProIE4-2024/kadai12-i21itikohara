@@ -170,7 +170,9 @@ Command: grep .txt < aaa.txt         //存在しないファイルを入力の�
 aaa.txt: No such file or directory
 Command: cd > b.txt                 //内部コマンドでリダイレクトを使用した時、文法のエラーが出る
 Usage: cd DIR
-
+Command:  > a.txt                   //ofileが存在しない時、redirectでエラーが発生するが、何も出力されない    
+Command:  < a.txt                   //ifileが存在しない時、redirectでエラーが発生するが、何も出力されない
+Command: 
 
 */
 
